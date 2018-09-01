@@ -1,0 +1,12 @@
+*.py[cod]
+__pycache__/
+.pytest*/
+.coverage
+
+.deploy_cfg
+
+.vscode/
+.DS_Store
+
+# C extensions
+*.so
