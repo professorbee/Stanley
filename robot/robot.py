@@ -2,19 +2,22 @@ import magicbot
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
+import math
 
 from robotpy_ext.common_drivers import navx
 from networktables import NetworkTables
 
 from ctre import WPI_TalonSRX as CANTalon
 
-from components import drive, lift, grabber
+from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
+from common import misc
 
 
 class Stanley(magicbot.MagicRobot):
     drive: drive.Drive
     lift: lift.Lift
+    intake: intake.Intake
     grabber: grabber.Grabber
 
     def createObjects(self):
@@ -43,6 +46,9 @@ class Stanley(magicbot.MagicRobot):
         self.lift_follower1.follow(self.lift_master)
         self.lift_follower2.follow(self.lift_master)
 
+        self.left_intake_motor = wpilib.Spark(2)
+        self.right_intake_motor = wpilib.Spark(3)
+
         self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
 
         self.navX = navx.AHRS.create_spi()
@@ -65,6 +71,12 @@ class Stanley(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         self.drive.drive(self.stick.getY(), self.stick.getZ())
+
+        intake_speed = self.gampad.getY(GenericHID.Hand.kLeft)
+        if abs(intake_speed) >= 0.03:
+            self.intake.set_speed(misc.signed_square(intake_speed))
+        else:
+            self.intake.set_speed(0)
 
         if self.stick.getRawButton(4):
             self.grabber.grab()
