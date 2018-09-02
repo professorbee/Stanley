@@ -1,0 +1,20 @@
+{
+    "pyfrc": {
+        "robot": {
+            "w": 2,
+            "h": 3,
+            "starting_x": 2,
+            "starting_y": 20,
+            "starting_angle": 0
+        }
+    },
+    "pwm": {
+        "0": "Left drive motor pair",
+        "1": "Right drive motor pair"
+    },
+    "CAN": {
+        "2": "Lift Master",
+        "3": "Lift Follower 1",
+        "4": "Lift Follower 2"
+    }
+}
