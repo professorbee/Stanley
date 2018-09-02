@@ -11,7 +11,6 @@ class Drive(object):
     navX: navx.AHRS
     right_encoder: ExternalEncoder
     left_encoder: ExternalEncoder
-    sd: NetworkTable
 
     def __init__(self):
         self.y = self.rotation = 0
@@ -30,7 +29,11 @@ class Drive(object):
         self.update_sd()
 
     def update_sd(self):
-        self.sd.putValue("Drive/Left Drive Encoder", self.left_encoder.get())
-        self.sd.putValue("Drive/Right Drive Encoder", self.right_encoder.get())
-        self.sd.putValue("Drive/NavX", self.navX.getYaw())
+        wpilib.SmartDashboard.putData(
+            "Drive/Left Drive Encoder", self.left_encoder.encoder
+        )
+        wpilib.SmartDashboard.putData(
+            "Drive/Right Drive Encoder", self.right_encoder.encoder
+        )
+        wpilib.SmartDashboard.putNumber("Drive/NavX", self.navX.getYaw())
 

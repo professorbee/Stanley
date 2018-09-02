@@ -60,7 +60,7 @@ class Stanley(magicbot.MagicRobot):
 
         self.navX = navx.AHRS.create_spi()
 
-        self.sd = NetworkTables.getTable("SmartDashboard")
+        self.net_table = NetworkTables.getTable("SmartDashboard")
 
         self.pdp = wpilib.PowerDistributionPanel(0)
 

@@ -14,7 +14,6 @@ class LiftMode(Enum):
 class Lift(object):
     lift_master: CANTalon
     lift_encoder: common.encoder.BaseEncoder
-    sd: NetworkTable
 
     def setup(self):
         self.pid_controller = wpilib.PIDController(
@@ -32,4 +31,4 @@ class Lift(object):
         self.pid_controller.setSetpoint(new_pos)
 
     def execute(self):
-        self.sd.putValue("Lift Encoder", self.lift_encoder.get())
+        wpilib.SmartDashboard.putData("Lift Encoder", self.lift_encoder.encoder)
