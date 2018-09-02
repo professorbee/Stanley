@@ -48,8 +48,14 @@ class ExternalEncoder(BaseEncoder):
         from the encoders connected over DIO
     """
 
-    def __init__(self, chan_a, chan_b, is_reversed=False):
-        self.encoder = wpilib.Encoder(chan_a, chan_b, is_reversed)
+    def __init__(
+        self,
+        chan_a,
+        chan_b,
+        is_reversed=False,
+        encoding_type=wpilib.Encoder.EncodingType.k4X,
+    ):
+        self.encoder = wpilib.Encoder(chan_a, chan_b, is_reversed, encoding_type)
         self.initialValue = self.encoder.get()
 
     def get(self) -> int:

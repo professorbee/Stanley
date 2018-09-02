@@ -14,6 +14,11 @@ from common.encoder import ExternalEncoder
 from common import misc
 
 
+ENCODER_REVOLUTION = 360
+WHEEL_DIAMETER = 4
+WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
+
+
 class Stanley(magicbot.MagicRobot):
     drive: drive.Drive
     lift: lift.Lift
@@ -38,6 +43,8 @@ class Stanley(magicbot.MagicRobot):
         # Drive encoders
         self.left_encoder = ExternalEncoder(2, 3)
         self.right_encoder = ExternalEncoder(4, 5, True)
+        self.left_encoder.encoder.setDistancePerPulse(WHEEL_REVOLUTION)
+        self.right_encoder.encoder.setDistancePerPulse(WHEEL_REVOLUTION)
 
         # Elevator motors
         self.lift_master = CANTalon(2)
