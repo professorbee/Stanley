@@ -14,8 +14,6 @@ class Drive(object):
     sd: NetworkTable
 
     def __init__(self):
-        self.sd = NetworkTables.getTable("/SmartDashboard")
-
         self.y = self.rotation = 0
         self.squared = True
 
@@ -29,3 +27,10 @@ class Drive(object):
 
         self.y = 0
         self.rotation = 0
+        self.update_sd()
+
+    def update_sd(self):
+        self.sd.putValue("Drive/Left Drive Encoder", self.left_encoder.get())
+        self.sd.putValue("Drive/Right Drive Encoder", self.right_encoder.get())
+        self.sd.putValue("Drive/NavX", self.navX.getYaw())
+
