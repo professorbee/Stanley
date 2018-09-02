@@ -36,4 +36,3 @@ class Drive(object):
             "Drive/Right Drive Encoder", self.right_encoder.encoder
         )
         wpilib.SmartDashboard.putNumber("Drive/NavX", self.navX.getYaw())
-

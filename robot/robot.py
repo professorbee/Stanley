@@ -93,6 +93,12 @@ class Stanley(magicbot.MagicRobot):
         elif self.stick.getRawButton(10):
             self.lift.set_setpoint(2565)
 
+        # Lift Manual Override
+        squared_lift_value = misc.signed_square(
+            self.gampad.getY(GenericHID.Hand.kRight)
+        )
+        self.lift.set_manual_override_value(squared_lift_value)
+
 
 if __name__ == "__main__":
     wpilib.run(Stanley)
