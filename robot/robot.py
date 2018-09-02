@@ -8,13 +8,14 @@ from networktables import NetworkTables
 
 from ctre import WPI_TalonSRX as CANTalon
 
-from components import drive, lift
+from components import drive, lift, grabber
 from common.encoder import ExternalEncoder
 
 
 class Stanley(magicbot.MagicRobot):
     drive: drive.Drive
     lift: lift.Lift
+    grabber: grabber.Grabber
 
     def createObjects(self):
         self.stick = wpilib.Joystick(0)
@@ -42,6 +43,8 @@ class Stanley(magicbot.MagicRobot):
         self.lift_follower1.follow(self.lift_master)
         self.lift_follower2.follow(self.lift_master)
 
+        self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
+
         self.navX = navx.AHRS.create_spi()
 
         self.sd = NetworkTables.getTable("SmartDashboard")
@@ -62,6 +65,11 @@ class Stanley(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         self.drive.drive(self.stick.getY(), self.stick.getZ())
+
+        if self.stick.getRawButton(4):
+            self.grabber.grab()
+        elif self.stick.getRawButton(5):
+            self.grabber.release()
 
         if self.stick.getRawButton(8):
             self.lift.set_setpoint(0)
