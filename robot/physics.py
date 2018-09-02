@@ -24,13 +24,15 @@ class PhysicsEngine(object):
         self.drivetrain = tankmodel.TankModel.theory(
             motor_cfgs.MOTOR_CFG_CIM,  # motor configuration
             100 * units.lbs,  # robot mass
-            4.67,  # drivetrain gear ratio
+            5.0,  # drivetrain gear ratio
             2,  # motors per side
             22 * units.inch,  # robot wheelbase
             23 * units.inch + bumper_width * 2,  # robot width
             32 * units.inch + bumper_width * 2,  # robot length
             4 * units.inch,  # wheel diameter
         )
+
+        self.physics_controller.add_device_gyro_channel("navxmxp_spi_4_angle")
 
     def update_sim(self, hal_data, now, tm_diff):
         # Simulate the drivetrain
