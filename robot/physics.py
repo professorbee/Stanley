@@ -23,13 +23,13 @@ class PhysicsEngine(object):
 
         self.drivetrain = tankmodel.TankModel.theory(
             motor_cfgs.MOTOR_CFG_CIM,  # motor configuration
-            110 * units.lbs,  # robot mass
-            10.71,  # drivetrain gear ratio
+            100 * units.lbs,  # robot mass
+            4.67,  # drivetrain gear ratio
             2,  # motors per side
             22 * units.inch,  # robot wheelbase
             23 * units.inch + bumper_width * 2,  # robot width
             32 * units.inch + bumper_width * 2,  # robot length
-            6 * units.inch,  # wheel diameter
+            4 * units.inch,  # wheel diameter
         )
 
     def update_sim(self, hal_data, now, tm_diff):
@@ -39,6 +39,10 @@ class PhysicsEngine(object):
 
         x, y, angle = self.drivetrain.get_distance(l_motor, r_motor, tm_diff)
         self.physics_controller.distance_drive(x, y, angle)
+
+        # Simulate drive encoders
+        hal_data["encoder"][1]["count"] = int(self.drivetrain.l_position)
+        hal_data["encoder"][2]["count"] = int(self.drivetrain.r_position)
 
         # Simulate the lift
         hal_data["encoder"][0]["count"] = self.motion.compute(
