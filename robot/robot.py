@@ -55,6 +55,8 @@ class Stanley(magicbot.MagicRobot):
 
         self.sd = NetworkTables.getTable("SmartDashboard")
 
+        wpilib.CameraServer.launch()
+
     def autonomous(self):
         """Prepare for autonomous mode"""
 
