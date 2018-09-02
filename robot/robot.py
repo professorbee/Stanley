@@ -62,15 +62,6 @@ class Stanley(magicbot.MagicRobot):
 
         magicbot.MagicRobot.autonomous(self)
 
-    def disabledPeriodic(self):
-        pass
-
-    def disabledInit(self):
-        pass
-
-    def teleopInit(self):
-        pass
-
     def teleopPeriodic(self):
         self.drive.drive(self.stick.getY(), self.stick.getZ())
 
