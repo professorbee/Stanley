@@ -5,7 +5,7 @@ class Grabber:
     grabber_solenoid: wpilib.DoubleSolenoid
 
     def setup(self):
-        self.state = wpilib.DoubleSolenoid.Value.kForward
+        self.state = wpilib.DoubleSolenoid.Value.kReverse
 
     def set_state(self, new_state: wpilib.DoubleSolenoid.Value):
         self.state = new_state

@@ -73,7 +73,7 @@ class Stanley(magicbot.MagicRobot):
         magicbot.MagicRobot.autonomous(self)
 
     def teleopPeriodic(self):
-        self.drive.drive(self.stick.getY(), self.stick.getZ())
+        self.drive.drive(-self.stick.getY(), -self.stick.getZ())
 
         intake_speed = self.gampad.getY(GenericHID.Hand.kLeft)
         if abs(intake_speed) >= 0.03:
@@ -81,21 +81,27 @@ class Stanley(magicbot.MagicRobot):
         else:
             self.intake.set_speed(0)
 
-        if self.stick.getRawButton(4):
-            self.grabber.grab()
-        elif self.stick.getRawButton(5):
+        if self.stick.getRawButton(1):
+            self.intake.set_speed(.75)
+        if self.stick.getRawButton(2):
+            self.intake.set_speed(-.75)
+
+        if self.stick.getRawButton(5):
             self.grabber.release()
+        elif self.stick.getRawButton(6):
+            self.grabber.grab()
 
         if self.stick.getRawButton(8):
             self.lift.set_setpoint(0)
         elif self.stick.getRawButton(9):
             self.lift.set_setpoint(2565 * .5)
         elif self.stick.getRawButton(10):
-            self.lift.set_setpoint(2565)
+            # self.lift.set_setpoint(2565)
+            self.lift.set_setpoint(1620)
 
         # Lift Manual Override
-        squared_lift_value = misc.signed_square(
-            self.gampad.getY(GenericHID.Hand.kRight)
+        squared_lift_value = (
+            misc.signed_square(self.gampad.getY(GenericHID.Hand.kRight)) * .5
         )
         self.lift.set_manual_override_value(squared_lift_value)
 
