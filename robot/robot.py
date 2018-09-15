@@ -67,6 +67,8 @@ class Stanley(magicbot.MagicRobot):
         wpilib.CameraServer.launch()
         wpilib.SmartDashboard.putData("PowerDistributionPanel", self.pdp)
 
+        wpilib.CameraServer.launch()
+
     def autonomous(self):
         """Prepare for autonomous mode"""
 
