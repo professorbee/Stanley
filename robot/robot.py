@@ -86,9 +86,9 @@ class Stanley(magicbot.MagicRobot):
         if self.stick.getRawButton(2):
             self.intake.set_speed(-.75)
 
-        if self.stick.getRawButton(5):
+        if self.stick.getRawButton(4):
             self.grabber.release()
-        elif self.stick.getRawButton(6):
+        elif self.stick.getRawButton(3):
             self.grabber.grab()
 
         if self.stick.getRawButton(8):
@@ -96,8 +96,8 @@ class Stanley(magicbot.MagicRobot):
         elif self.stick.getRawButton(9):
             self.lift.set_setpoint(2565 * .5)
         elif self.stick.getRawButton(10):
-            # self.lift.set_setpoint(2565)
-            self.lift.set_setpoint(1620)
+            self.lift.set_setpoint(2565)
+            # self.lift.set_setpoint(1620)
 
         # Lift Manual Override
         squared_lift_value = (

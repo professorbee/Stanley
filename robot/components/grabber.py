@@ -11,10 +11,10 @@ class Grabber:
         self.state = new_state
 
     def grab(self):
-        self.set_state(wpilib.DoubleSolenoid.Value.kForward)
+        self.set_state(wpilib.DoubleSolenoid.Value.kReverse)
 
     def release(self):
-        self.set_state(wpilib.DoubleSolenoid.Value.kReverse)
+        self.set_state(wpilib.DoubleSolenoid.Value.kForward)
 
     def execute(self):
         self.grabber_solenoid.set(self.state)
