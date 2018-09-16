@@ -3,7 +3,6 @@ import wpilib
 from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
 import math
-from enum import Enum, auto
 
 from robotpy_ext.common_drivers import navx
 from networktables import NetworkTables
@@ -14,18 +13,12 @@ from ctre import WPI_TalonSRX as CANTalon
 from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
 from common import misc
-
+import control
+from control import ControlMode
 
 ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
 WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
-
-
-class ControlMode(Enum):
-    JOYSTICK = auto()
-    GAMEPAD = auto()
-    ZACH = auto()
-    MANUAL_LIFT = auto()
 
 
 class Stanley(magicbot.MagicRobot):
@@ -34,12 +27,19 @@ class Stanley(magicbot.MagicRobot):
     intake: intake.Intake
     grabber: grabber.Grabber
 
+    ## Control modes
+    joystick_control: control.Joystick
+    # Gamepad or "Zach" controls
+    gamepad_control: control.Gamepad
+    lift_override_control: control.LiftOverride
+
     def __init__(self):
         self.control_chooser = wpilib.SendableChooser()
-        self.control_chooser.addObject("Joystick", "1")
-        self.control_chooser.addObject("Gamepad", "2")
-        self.control_chooser.addObject("Zach", "3")
-        self.control_chooser.addObject("Lift Override", "4")
+        self.control_chooser.addObject("Joystick", 1)
+        self.control_chooser.addObject("Gamepad", 2)
+        self.control_chooser.addObject("Zach", 3)
+        self.control_chooser.addObject("Lift Override", 4)
+        self.control_chooser.addObject("Remote Control", 5)
 
         wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
 
@@ -99,76 +99,24 @@ class Stanley(magicbot.MagicRobot):
         magicbot.MagicRobot.autonomous(self)
 
     def teleopPeriodic(self):
+        ## Drive code is in the ".control" module
         if (
             self.control_mode == ControlMode.GAMEPAD
             or self.control_mode == ControlMode.ZACH
         ):
-            self.gamepad_drive()
+            self.gamepad_control.process()
         elif self.control_mode == ControlMode.JOYSTICK:
-            self.joystick_drive()
+            self.joystick_control.process()
         elif self.control_mode == ControlMode.MANUAL_LIFT:
-            # Lift Manual Override
-            squared_lift_value = (
-                misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
-            )
-            self.lift.set_manual_override_value(squared_lift_value)
+            self.lift_override_control.process()
 
         # Set the override state
         # This is outside the if block so that it will be disabled properly
         self.lift.set_manual_override(self.control_mode == ControlMode.MANUAL_LIFT)
 
-    def gamepad_drive(self):
-        self.drive.drive(
-            self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
-            + -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft),
-            -self.gamepad.getX(GenericHID.Hand.kLeft) * .75,
-        )
-
-        self.intake.set_speed(-self.gamepad.getY(GenericHID.Hand.kRight))
-
-        if self.gamepad.getXButton():
-            self.grabber.release()
-        elif self.gamepad.getBButton():
-            self.grabber.grab()
-
-        pov = self.gamepad.getPOV()
-        if pov == 180:
-            self.lift.set_setpoint(0)
-        elif pov == 270 or pov == 90:
-            self.lift.set_setpoint(2565 * .5)
-        elif pov == 0:
-            self.lift.set_setpoint(2565)
-
-    def joystick_drive(self):
-        self.drive.drive(-self.stick.getY(), -self.stick.getZ())
-
-        intake_speed = self.gamepad.getY(GenericHID.Hand.kLeft)
-        if abs(intake_speed) >= 0.03:
-            self.intake.set_speed(misc.signed_square(intake_speed))
-        else:
-            self.intake.set_speed(0)
-
-        if self.stick.getRawButton(1):
-            self.intake.set_speed(.75)
-        if self.stick.getRawButton(2):
-            self.intake.set_speed(-.75)
-
-        if self.stick.getRawButton(4):
-            self.grabber.release()
-        elif self.stick.getRawButton(3):
-            self.grabber.grab()
-
-        if self.stick.getRawButton(8):
-            self.lift.set_setpoint(0)
-        elif self.stick.getRawButton(9):
-            self.lift.set_setpoint(2565 * .5)
-        elif self.stick.getRawButton(10):
-            self.lift.set_setpoint(2565)
-            # self.lift.set_setpoint(1620)
-
     def control_mode_changed(self, new_value):
         try:
-            self.control_mode = ControlMode(int(self.control_chooser.getSelected()))
+            self.control_mode = ControlMode(self.control_chooser.getSelected())
         except ValueError:
             print(
                 "Unable to set control mode, `{}:{}` is not valid".format(
