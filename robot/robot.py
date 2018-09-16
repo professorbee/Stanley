@@ -39,6 +39,7 @@ class Stanley(magicbot.MagicRobot):
         self.control_chooser.addObject("Joystick", "1")
         self.control_chooser.addObject("Gamepad", "2")
         self.control_chooser.addObject("Zach", "3")
+        self.control_chooser.addObject("Lift Override", "4")
 
         wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
 
@@ -105,6 +106,16 @@ class Stanley(magicbot.MagicRobot):
             self.gamepad_drive()
         elif self.control_mode == ControlMode.JOYSTICK:
             self.joystick_drive()
+        elif self.control_mode == ControlMode.MANUAL_LIFT:
+            # Lift Manual Override
+            squared_lift_value = (
+                misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
+            )
+            self.lift.set_manual_override_value(squared_lift_value)
+
+        # Set the override state
+        # This is outside the if block so that it will be disabled properly
+        self.lift.set_manual_override(self.control_mode == ControlMode.MANUAL_LIFT)
 
     def gamepad_drive(self):
         self.drive.drive(
@@ -154,12 +165,6 @@ class Stanley(magicbot.MagicRobot):
         elif self.stick.getRawButton(10):
             self.lift.set_setpoint(2565)
             # self.lift.set_setpoint(1620)
-
-        # Lift Manual Override
-        squared_lift_value = (
-            misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
-        )
-        self.lift.set_manual_override_value(squared_lift_value)
 
     def control_mode_changed(self, new_value):
         try:

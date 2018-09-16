@@ -15,14 +15,8 @@ class LiftMode(Enum):
 class Lift(object):
     lift_master: CANTalon
     lift_encoder: common.encoder.BaseEncoder
-    net_table: NetworkTable
 
     def setup(self):
-        wpilib.SmartDashboard.putBoolean("Lift Manual Override", False)
-        self.net_table.addEntryListener(
-            self.control_mode_changed, key="Lift Manual Override"
-        )
-
         self.manual_override = False
 
         self.pid_controller = wpilib.PIDController(
@@ -43,6 +37,18 @@ class Lift(object):
     def set_manual_override_value(self, new_value):
         self.manual_override_value = new_value
 
+    def set_manual_override(self, override: bool):
+        # Disable pid if manual override is being enabled
+        if self.manual_override == False and override == True:
+            self.pid_controller.disable()
+
+        # Renable pid and zero the encoders if manual override is being disabled
+        if self.manual_override == True and override == False:
+            self.lift_encoder.zero()
+            self.pid_controller.enable()
+
+        self.manual_override = override
+
     def execute(self):
         if self.manual_override:
             self.lift_master.set(
@@ -50,11 +56,3 @@ class Lift(object):
             )
 
         wpilib.SmartDashboard.putData("Lift Encoder", self.lift_encoder.encoder)
-
-    def control_mode_changed(self, _table, _key, manual, _is_new):
-        self.manual_override = manual
-        if manual:
-            self.pid_controller.disable()
-        else:
-            self.lift_encoder.zero()
-            self.pid_controller.enable()
