@@ -3,9 +3,11 @@ import wpilib
 from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
 import math
+from enum import Enum, auto
 
 from robotpy_ext.common_drivers import navx
 from networktables import NetworkTables
+from networktables.util import ChooserControl
 
 from ctre import WPI_TalonSRX as CANTalon
 
@@ -19,15 +21,40 @@ WHEEL_DIAMETER = 4
 WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
 
 
+class ControlMode(Enum):
+    JOYSTICK = auto()
+    GAMEPAD = auto()
+    ZACH = auto()
+    MANUAL_LIFT = auto()
+
+
 class Stanley(magicbot.MagicRobot):
     drive: drive.Drive
     lift: lift.Lift
     intake: intake.Intake
     grabber: grabber.Grabber
 
+    def __init__(self):
+        self.control_chooser = wpilib.SendableChooser()
+        self.control_chooser.addObject("Joystick", "1")
+        self.control_chooser.addObject("Gamepad", "2")
+        self.control_chooser.addObject("Zach", "3")
+
+        wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
+
+        self.control_chooser_control = ChooserControl(
+            "Control Mode", on_selected=self.control_mode_changed
+        )
+
+        self.control_mode = ControlMode.GAMEPAD
+
+        wpilib.CameraServer.launch()
+
+        super().__init__()
+
     def createObjects(self):
         self.stick = wpilib.Joystick(0)
-        self.gampad = wpilib.XboxController(1)
+        self.gamepad = wpilib.XboxController(1)
 
         # Drive motors
         self.left_motor = wpilib.Spark(0)
@@ -63,11 +90,7 @@ class Stanley(magicbot.MagicRobot):
         self.net_table = NetworkTables.getTable("SmartDashboard")
 
         self.pdp = wpilib.PowerDistributionPanel(0)
-
-        wpilib.CameraServer.launch()
         wpilib.SmartDashboard.putData("PowerDistributionPanel", self.pdp)
-
-        wpilib.CameraServer.launch()
 
     def autonomous(self):
         """Prepare for autonomous mode"""
@@ -75,9 +98,40 @@ class Stanley(magicbot.MagicRobot):
         magicbot.MagicRobot.autonomous(self)
 
     def teleopPeriodic(self):
+        if (
+            self.control_mode == ControlMode.GAMEPAD
+            or self.control_mode == ControlMode.ZACH
+        ):
+            self.gamepad_drive()
+        elif self.control_mode == ControlMode.JOYSTICK:
+            self.joystick_drive()
+
+    def gamepad_drive(self):
+        self.drive.drive(
+            self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
+            + -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft),
+            -self.gamepad.getX(GenericHID.Hand.kLeft) * .75,
+        )
+
+        self.intake.set_speed(-self.gamepad.getY(GenericHID.Hand.kRight))
+
+        if self.gamepad.getXButton():
+            self.grabber.release()
+        elif self.gamepad.getBButton():
+            self.grabber.grab()
+
+        pov = self.gamepad.getPOV()
+        if pov == 180:
+            self.lift.set_setpoint(0)
+        elif pov == 270 or pov == 90:
+            self.lift.set_setpoint(2565 * .5)
+        elif pov == 0:
+            self.lift.set_setpoint(2565)
+
+    def joystick_drive(self):
         self.drive.drive(-self.stick.getY(), -self.stick.getZ())
 
-        intake_speed = self.gampad.getY(GenericHID.Hand.kLeft)
+        intake_speed = self.gamepad.getY(GenericHID.Hand.kLeft)
         if abs(intake_speed) >= 0.03:
             self.intake.set_speed(misc.signed_square(intake_speed))
         else:
@@ -103,9 +157,19 @@ class Stanley(magicbot.MagicRobot):
 
         # Lift Manual Override
         squared_lift_value = (
-            misc.signed_square(self.gampad.getY(GenericHID.Hand.kRight)) * .5
+            misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
         )
         self.lift.set_manual_override_value(squared_lift_value)
+
+    def control_mode_changed(self, new_value):
+        try:
+            self.control_mode = ControlMode(int(self.control_chooser.getSelected()))
+        except ValueError:
+            print(
+                "Unable to set control mode, `{}:{}` is not valid".format(
+                    new_value, self.control_chooser.getSelected()
+                )
+            )
 
 
 if __name__ == "__main__":
