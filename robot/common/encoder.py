@@ -61,5 +61,5 @@ class ExternalEncoder(BaseEncoder):
     def get(self) -> int:
         return self.encoder.get()
 
-    def zero():
+    def zero(self):
         self.encoder.reset()
