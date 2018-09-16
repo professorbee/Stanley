@@ -17,6 +17,7 @@ class Gamepad:
     drive: components.drive.Drive
     lift: components.lift.Lift
     intake: components.intake.Intake
+    grabber: components.grabber.Grabber
 
     def process(self):
         self.drive.drive(

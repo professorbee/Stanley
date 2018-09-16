@@ -16,6 +16,7 @@ class Joystick:
     drive: components.drive.Drive
     lift: components.lift.Lift
     intake: components.intake.Intake
+    grabber: components.grabber.Grabber
 
     def process(self):
         self.drive.drive(-self.stick.getY(), -self.stick.getZ())
