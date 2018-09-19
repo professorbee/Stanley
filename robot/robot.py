@@ -1,10 +1,9 @@
+import math
 import magicbot
 import wpilib
-from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
-import math
 
-from robotpy_ext.common_drivers import navx
+import navx
 from networktables import NetworkTables
 from networktables.util import ChooserControl
 
@@ -12,7 +11,6 @@ from ctre import WPI_TalonSRX as CANTalon
 
 from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
-from common import misc
 import control
 from control import ControlMode
 
@@ -87,7 +85,7 @@ class Stanley(magicbot.MagicRobot):
 
         self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
 
-        self.navX = navx.AHRS.create_spi()
+        self.navx = navx.AHRS.create_spi()
 
         self.net_table = NetworkTables.getTable("SmartDashboard")
 

@@ -1,8 +1,6 @@
 import wpilib
 from enum import Enum
 from ctre import WPI_TalonSRX as CANTalon
-from networktables.networktable import NetworkTable
-from networktables.util import ntproperty
 
 import common.encoder
 
@@ -39,11 +37,11 @@ class Lift(object):
 
     def set_manual_override(self, override: bool):
         # Disable pid if manual override is being enabled
-        if self.manual_override == False and override == True:
+        if not self.manual_override and override:
             self.pid_controller.disable()
 
         # Renable pid and zero the encoders if manual override is being disabled
-        if self.manual_override == True and override == False:
+        if self.manual_override and not override:
             self.lift_encoder.zero()
             self.pid_controller.enable()
 
