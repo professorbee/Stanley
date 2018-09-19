@@ -9,7 +9,7 @@ from common.encoder import ExternalEncoder
 
 class Drive(object):
     drive_train: wpilib.drive.DifferentialDrive
-    navX: navx.AHRS
+    navx: navx.AHRS
     right_encoder: ExternalEncoder
     left_encoder: ExternalEncoder
 
@@ -36,4 +36,4 @@ class Drive(object):
         wpilib.SmartDashboard.putData(
             "Drive/Right Drive Encoder", self.right_encoder.encoder
         )
-        wpilib.SmartDashboard.putNumber("Drive/NavX", self.navX.getYaw())
+        wpilib.SmartDashboard.putNumber("Drive/Navx", self.navx.getYaw())

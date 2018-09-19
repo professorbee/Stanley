@@ -86,7 +86,7 @@ class Stanley(magicbot.MagicRobot):
 
         self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
 
-        self.navX = navx.AHRS.create_spi()
+        self.navx = navx.AHRS.create_spi()
 
         self.net_table = NetworkTables.getTable("SmartDashboard")
 
