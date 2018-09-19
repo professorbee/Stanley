@@ -19,7 +19,7 @@ class LiftOverride:
     def process(self):
         # Lift Manual Override
         squared_lift_value = (
-            misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
+            common.misc.signed_square(self.gamepad.getY(GenericHID.Hand.kRight)) * .5
         )
         self.lift.set_manual_override_value(squared_lift_value)
 

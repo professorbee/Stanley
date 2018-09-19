@@ -11,8 +11,8 @@ class PhysicsEngine(object):
 
     def __init__(self, physics_controller):
         """
-            :param physics_controller: `pyfrc.physics.core.PhysicsInterface` object
-                                       to communicate simulation effects to
+            :param physics_controller: `pyfrc.physics.core.PhysicsInterface`
+                                       object to communicate simulation effects to
         """
 
         self.physics_controller = physics_controller

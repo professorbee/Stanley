@@ -1,8 +1,7 @@
+import math
 import magicbot
 import wpilib
-from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
-import math
 
 import navx
 from networktables import NetworkTables
@@ -12,7 +11,6 @@ from ctre import WPI_TalonSRX as CANTalon
 
 from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
-from common import misc
 import control
 from control import ControlMode
 
