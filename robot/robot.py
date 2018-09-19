@@ -32,6 +32,7 @@ class Stanley(magicbot.MagicRobot):
     # Gamepad or "Zach" controls
     gamepad_control: control.Gamepad
     lift_override_control: control.LiftOverride
+    remote_control: control.Remote
 
     def __init__(self):
         self.control_chooser = wpilib.SendableChooser()
@@ -109,6 +110,8 @@ class Stanley(magicbot.MagicRobot):
             self.joystick_control.process()
         elif self.control_mode == ControlMode.MANUAL_LIFT:
             self.lift_override_control.process()
+        elif self.control_mode == ControlMode.REMOTE_CONTROL:
+            self.remote_control.process()
 
         # Set the override state
         # This is outside the if block so that it will be disabled properly

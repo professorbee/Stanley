@@ -13,6 +13,7 @@ class Drive(object):
     left_encoder: ExternalEncoder
 
     def __init__(self):
+        self.direct_drive = False
         self.y = self.rotation = 0
         self.squared = True
 
@@ -22,11 +23,13 @@ class Drive(object):
         self.squared = squared
 
     def execute(self):
-        self.drive_train.arcadeDrive(-self.y, -self.rotation, self.squared)
-
-        self.y = 0
-        self.rotation = 0
         self.update_sd()
+        # In direct drive, an outside force is controlling the motor output, do nothing
+        if not self.direct_drive:
+            self.drive_train.arcadeDrive(-self.y, -self.rotation, self.squared)
+
+            self.y = 0
+            self.rotation = 0
 
     def update_sd(self):
         wpilib.SmartDashboard.putData(
