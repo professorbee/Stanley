@@ -4,7 +4,7 @@ from wpilib.interfaces.generichid import GenericHID
 import wpilib.drive
 import math
 
-from robotpy_ext.common_drivers import navx
+import navx
 from networktables import NetworkTables
 from networktables.util import ChooserControl
 

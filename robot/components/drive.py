@@ -1,6 +1,7 @@
 import wpilib
 
-from robotpy_ext.common_drivers import navx, distance_sensors
+from robotpy_ext.common_drivers import distance_sensors
+import navx
 from networktables import NetworkTables
 from networktables.networktable import NetworkTable
 from common.encoder import ExternalEncoder
