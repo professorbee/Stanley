@@ -1,3 +1,4 @@
 pyfrc
 wpilib
 robotpy-ctre
+robotpy-navx
