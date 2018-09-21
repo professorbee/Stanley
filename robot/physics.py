@@ -17,7 +17,7 @@ class PhysicsEngine(object):
 
         self.physics_controller = physics_controller
         # Create a lift simulation
-        self.lift_motion = motion.LinearMotion("Lift", 360, 6)
+        self.lift_motion = motion.LinearMotion("Lift", 6, 360)
 
         # TODO: Check the values
         bumper_width = 3.25 * units.inch
