@@ -20,6 +20,7 @@ WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
 
 
 class Stanley(magicbot.MagicRobot):
+    ## Magic components
     drive: drive.Drive
     lift: lift.Lift
     intake: intake.Intake
@@ -31,27 +32,8 @@ class Stanley(magicbot.MagicRobot):
     gamepad_control: control.Gamepad
     lift_override_control: control.LiftOverride
 
-    def __init__(self):
-        self.control_chooser = wpilib.SendableChooser()
-        self.control_chooser.addObject("Joystick", 1)
-        self.control_chooser.addObject("Gamepad", 2)
-        self.control_chooser.addObject("Zach", 3)
-        self.control_chooser.addObject("Lift Override", 4)
-        self.control_chooser.addObject("Remote Control", 5)
-
-        wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
-
-        self.control_chooser_control = ChooserControl(
-            "Control Mode", on_selected=self.control_mode_changed
-        )
-
-        self.control_mode = ControlMode.GAMEPAD
-
-        wpilib.CameraServer.launch()
-
-        super().__init__()
-
     def createObjects(self):
+        # Inputs
         self.stick = wpilib.Joystick(0)
         self.gamepad = wpilib.XboxController(1)
 
@@ -79,17 +61,40 @@ class Stanley(magicbot.MagicRobot):
         self.lift_follower1.follow(self.lift_master)
         self.lift_follower2.follow(self.lift_master)
 
+        # Intake motors
         self.left_intake_motor = wpilib.Spark(2)
         self.right_intake_motor = wpilib.Spark(3)
 
+        # Intake grabbers
         self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
 
+        # PDP
+        self.pdp = wpilib.PowerDistributionPanel(0)
+        wpilib.SmartDashboard.putData("PowerDistributionPanel", self.pdp)
+
+        # Misc
         self.navx = navx.AHRS.create_spi()
 
         self.net_table = NetworkTables.getTable("SmartDashboard")
 
-        self.pdp = wpilib.PowerDistributionPanel(0)
-        wpilib.SmartDashboard.putData("PowerDistributionPanel", self.pdp)
+        # Setup control chooser
+        self.control_chooser = wpilib.SendableChooser()
+        self.control_chooser.addObject("Joystick", 1)
+        self.control_chooser.addObject("Gamepad", 2)
+        self.control_chooser.addObject("Zach", 3)
+        self.control_chooser.addObject("Lift Override", 4)
+        self.control_chooser.addObject("Remote Control", 5)
+
+        wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
+
+        self.control_chooser_control = ChooserControl(
+            "Control Mode", on_selected=self.control_mode_changed
+        )
+
+        self.control_mode = ControlMode.GAMEPAD
+
+        # Launch camera server
+        wpilib.CameraServer.launch()
 
     def autonomous(self):
         """Prepare for autonomous mode"""
@@ -97,22 +102,27 @@ class Stanley(magicbot.MagicRobot):
         magicbot.MagicRobot.autonomous(self)
 
     def teleopPeriodic(self):
-        ## Drive code is in the ".control" module
-        if (
-            self.control_mode == ControlMode.GAMEPAD
-            or self.control_mode == ControlMode.ZACH
-        ):
-            self.gamepad_control.process()
-        elif self.control_mode == ControlMode.JOYSTICK:
-            self.joystick_control.process()
-        elif self.control_mode == ControlMode.MANUAL_LIFT:
-            self.lift_override_control.process()
+        # Dont let an error take down robot
+        with self.consumeExceptions():
+            ## Drive code is in the ".control" module
+            if (
+                self.control_mode == ControlMode.GAMEPAD
+                or self.control_mode == ControlMode.ZACH
+            ):
+                self.gamepad_control.process()
+            elif self.control_mode == ControlMode.JOYSTICK:
+                self.joystick_control.process()
+            elif self.control_mode == ControlMode.MANUAL_LIFT:
+                self.lift_override_control.process()
 
-        # Set the override state
-        # This is outside the if block so that it will be disabled properly
-        self.lift.set_manual_override(self.control_mode == ControlMode.MANUAL_LIFT)
+            # Set the override state
+            # This is outside the if block so that it will be disabled properly
+            self.lift.set_manual_override(self.control_mode == ControlMode.MANUAL_LIFT)
 
     def control_mode_changed(self, new_value):
+        """
+            Network tables callback to update control mode
+        """
         try:
             self.control_mode = ControlMode(self.control_chooser.getSelected())
         except ValueError:
@@ -124,4 +134,5 @@ class Stanley(magicbot.MagicRobot):
 
 
 if __name__ == "__main__":
+    # Run robot
     wpilib.run(Stanley)
