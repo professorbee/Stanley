@@ -1,6 +1,6 @@
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
-
+from common import misc
 
 import components
 

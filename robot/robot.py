@@ -30,12 +30,17 @@ class Stanley(magicbot.MagicRobot):
     joystick_control: control.Joystick
     # Gamepad or "Zach" controls
     gamepad_control: control.Gamepad
+    zach_control: control.Zach
     lift_override_control: control.LiftOverride
 
     def createObjects(self):
         # Inputs
-        self.stick = wpilib.Joystick(0)
-        self.gamepad = wpilib.XboxController(1)
+        # TODO: Update these dynamically
+        self.stick = wpilib.Joystick(2)
+        # self.gamepad = wpilib.XboxController(1)
+        # self.gamepad_alt = wpilib.XboxController(2)
+        self.gamepad = wpilib.XboxController(0)
+        self.gamepad_alt = wpilib.XboxController(1)
 
         # Drive motors
         self.left_motor = wpilib.Spark(0)
@@ -105,11 +110,10 @@ class Stanley(magicbot.MagicRobot):
         # Dont let an error take down robot
         with self.consumeExceptions():
             ## Drive code is in the ".control" module
-            if (
-                self.control_mode == ControlMode.GAMEPAD
-                or self.control_mode == ControlMode.ZACH
-            ):
+            if self.control_mode == ControlMode.GAMEPAD:
                 self.gamepad_control.process()
+            elif self.control_mode == ControlMode.ZACH:
+                self.zach_control.process()
             elif self.control_mode == ControlMode.JOYSTICK:
                 self.joystick_control.process()
             elif self.control_mode == ControlMode.MANUAL_LIFT:
