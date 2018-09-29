@@ -56,10 +56,10 @@ class ExternalEncoder(BaseEncoder):
         encoding_type=wpilib.Encoder.EncodingType.k4X,
     ):
         self.encoder = wpilib.Encoder(chan_a, chan_b, is_reversed, encoding_type)
-        self.initialValue = self.encoder.get()
+        self.initialValue = self.encoder.getDistance()
 
     def get(self) -> int:
-        return self.encoder.get()
+        return self.encoder.getDistance()
 
     def zero(self):
         self.encoder.reset()
