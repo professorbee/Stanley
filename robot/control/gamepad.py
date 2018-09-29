@@ -43,4 +43,3 @@ class Gamepad:
 
     def execute(self):
         pass
-

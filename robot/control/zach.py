@@ -21,11 +21,11 @@ class Zach:
     grabber: components.grabber.Grabber
 
     def process(self):
-        self.drive.drive(
-            self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
-            + -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft),
-            -self.gamepad.getX(GenericHID.Hand.kLeft) * .75,
-        )
+        forward_speed = self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
+        reverse_speed = -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft)
+        total_speed = forward_speed + reverse_speed
+
+        self.drive.drive(total_speed, -self.gamepad.getX(GenericHID.Hand.kLeft) * .75)
 
         self.intake.set_speed(-self.gamepad_alt.getY(GenericHID.Hand.kRight))
 
@@ -37,9 +37,9 @@ class Zach:
         if self.gamepad_alt.getXButton():
             self.lift.set_setpoint(0)
         elif self.gamepad_alt.getYButton():
-            self.lift.set_setpoint(2565 * .5)
+            self.lift.set_setpoint(428)
         elif self.gamepad_alt.getBButton():
-            self.lift.set_setpoint(2565)
+            self.lift.set_setpoint(1500)
 
     def execute(self):
         pass

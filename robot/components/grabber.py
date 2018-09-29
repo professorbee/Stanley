@@ -18,4 +18,3 @@ class Grabber:
 
     def execute(self):
         self.grabber_solenoid.set(self.state)
-

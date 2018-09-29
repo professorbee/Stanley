@@ -58,4 +58,3 @@ class PhysicsEngine(object):
         hal_data["encoder"][0]["count"] = self.lift_motion.compute(
             hal_data["CAN"][2]["value"], tm_diff
         )
-
