@@ -13,7 +13,7 @@ class AngleController:
 
     def setup(self,):
         self.target = 0
-        self.speed = 0.35
+        self.speed = 0.45
         self.finished = False
         self.start = self.navx.getAngle()
         self.enabled = False

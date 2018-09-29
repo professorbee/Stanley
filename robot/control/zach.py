@@ -51,9 +51,9 @@ class Zach:
         elif self.gamepad_alt.getXButton():
             self.lift.set_setpoint(600)
         elif self.gamepad_alt.getYButton():
-            self.lift.set_setpoint(1450)
+            self.lift.set_setpoint(1550)
         elif self.gamepad_alt.getBButton():
-            self.lift.set_setpoint(1450)
+            self.lift.set_setpoint(2367)
 
     def execute(self):
         pass

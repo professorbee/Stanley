@@ -38,10 +38,10 @@ class Gamepad:
             self.lift.set_setpoint(0)
         elif pov == 270 or pov == 90:
             # self.lift.set_setpoint(179 * .5)
-            self.lift.set_setpoint(2565 * .5)
+            self.lift.set_setpoint(2367 * .5)
         elif pov == 0:
             # self.lift.set_setpoint(179)
-            self.lift.set_setpoint(2565)
+            self.lift.set_setpoint(2367)
 
     def execute(self):
         pass
