@@ -26,6 +26,10 @@ class Drive(object):
         self.rotation = 0
         self.update_sd()
 
+    def reset_encoders(self):
+        self.left_encoder.zero()
+        self.right_encoder.zero()
+
     def update_sd(self):
         wpilib.SmartDashboard.putData(
             "Drive/Left Drive Encoder", self.left_encoder.encoder

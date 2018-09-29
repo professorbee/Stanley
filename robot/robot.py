@@ -13,6 +13,7 @@ from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
 import control
 from control import ControlMode
+from controller.angle_controller import AngleController
 
 ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
@@ -35,6 +36,8 @@ class Stanley(magicbot.MagicRobot):
     gamepad_control: control.Gamepad
     zach_control: control.Zach
     lift_override_control: control.LiftOverride
+
+    angle_ctrl: AngleController
 
     def createObjects(self):
         # Inputs
@@ -91,7 +94,7 @@ class Stanley(magicbot.MagicRobot):
         self.control_chooser = wpilib.SendableChooser()
         self.control_chooser.addObject("Joystick", 1)
         self.control_chooser.addObject("Gamepad", 2)
-        self.control_chooser.addObject("Zach", 3)
+        self.control_chooser.addDefault("Zach", 3)
         self.control_chooser.addObject("Lift Override", 4)
         self.control_chooser.addObject("Remote Control", 5)
 
