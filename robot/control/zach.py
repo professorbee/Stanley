@@ -24,6 +24,10 @@ class Zach:
         forward_speed = self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
         reverse_speed = -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft)
         total_speed = forward_speed + reverse_speed
+        if self.lift.lift_encoder.get() > 700:
+            total_speed *= 0.8
+        if self.lift.get_setpoint() > 1500:
+            total_speed *= 0.8
 
         self.drive.drive(total_speed, -self.gamepad.getX(GenericHID.Hand.kLeft) * .75)
 

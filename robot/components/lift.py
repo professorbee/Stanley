@@ -32,6 +32,9 @@ class Lift(object):
         self.setpoint = new_pos
         self.pid_controller.setSetpoint(new_pos)
 
+    def get_setpoint(self) -> float:
+        return self.setpoint
+
     def set_manual_override_value(self, new_value):
         self.manual_override_value = new_value
 
