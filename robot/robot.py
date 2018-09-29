@@ -18,6 +18,9 @@ ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
 WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
 
+LIFT_HUB_DIAMETER = 3 + (7 / 8)
+LIFT_HUB_REVOLUTION = (math.pi * LIFT_HUB_DIAMETER) / ENCODER_REVOLUTION
+
 
 class Stanley(magicbot.MagicRobot):
     ## Magic components
@@ -52,6 +55,8 @@ class Stanley(magicbot.MagicRobot):
 
         # Elevator encoder (gearbox)
         self.lift_encoder = ExternalEncoder(0, 1)
+        # TODO: Fix the pid
+        # self.lift_encoder.encoder.setDistancePerPulse(WHEEL_REVOLUTION)
 
         # Drive encoders
         self.left_encoder = ExternalEncoder(2, 3)

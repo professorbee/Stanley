@@ -39,11 +39,13 @@ class ApproachSwitch(StatefulAutonomous):
 
     @state()
     def reverse(self):
-        if self.drive.right_encoder.get() < -10:
+        print(self.drive.right_encoder.get())
+        if self.drive.right_encoder.get() < 20:
             self.next_state("finish2")
         self.drive.drive(-.6, 0)
 
     @state()
     def finish2(self):
         self.intake.set_speed(0)
+        self.drive.drive(0, 0)
         self.done()

@@ -20,9 +20,9 @@ class Lift(object):
         self.pid_controller = wpilib.PIDController(
             0.022, 0.0, 0.0, self.lift_encoder, self.lift_master
         )
-        self.pid_controller.setAbsoluteTolerance(0.005)
+        self.pid_controller.setAbsoluteTolerance(0.5)
         self.pid_controller.setContinuous(False)
-        self.pid_controller.setOutputRange(-.14, .5)
+        self.pid_controller.setOutputRange(-.14, .6)
         self.pid_controller.enable()
 
         self.setpoint = 0
@@ -57,3 +57,4 @@ class Lift(object):
             )
 
         wpilib.SmartDashboard.putData("Lift Encoder", self.lift_encoder.encoder)
+        wpilib.SmartDashboard.putBoolean("Lift Target", self.pid_controller.onTarget())

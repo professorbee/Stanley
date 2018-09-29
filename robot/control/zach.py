@@ -33,17 +33,27 @@ class Zach:
 
         self.intake.set_speed(-self.gamepad_alt.getY(GenericHID.Hand.kRight))
 
-        if self.gamepad_alt.getRawButton(5):
+        if self.gamepad_alt.getRawButton(6):
             self.grabber.grab()
-        elif self.gamepad_alt.getRawButton(6):
+        elif self.gamepad_alt.getRawButton(5):
             self.grabber.release()
 
-        if self.gamepad_alt.getXButton():
+        # if self.gamepad_alt.getAButton():
+        #     self.lift.set_setpoint(0)
+        # elif self.gamepad_alt.getXButton():
+        #     self.lift.set_setpoint(30)
+        # elif self.gamepad_alt.getYButton():
+        #     self.lift.set_setpoint(80)
+        # elif self.gamepad_alt.getBButton():
+        #     self.lift.set_setpoint(105)
+        if self.gamepad_alt.getAButton():
             self.lift.set_setpoint(0)
+        elif self.gamepad_alt.getXButton():
+            self.lift.set_setpoint(600)
         elif self.gamepad_alt.getYButton():
-            self.lift.set_setpoint(428)
+            self.lift.set_setpoint(1450)
         elif self.gamepad_alt.getBButton():
-            self.lift.set_setpoint(1500)
+            self.lift.set_setpoint(1450)
 
     def execute(self):
         pass
