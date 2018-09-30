@@ -24,6 +24,6 @@ class Baseline(StatefulAutonomous):
         self.drive.drive(.6, 0)
 
     @state()
-    def finish():
+    def finish(self):
         self.drive.drive(0, 0)
         self.done()

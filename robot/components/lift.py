@@ -22,7 +22,7 @@ class Lift(object):
         )
         self.pid_controller.setAbsoluteTolerance(0.5)
         self.pid_controller.setContinuous(False)
-        self.pid_controller.setOutputRange(-.14, .6)
+        self.pid_controller.setOutputRange(-.165, .6)
         self.pid_controller.enable()
 
         self.setpoint = 0
