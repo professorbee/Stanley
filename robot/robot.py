@@ -13,7 +13,7 @@ from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
 import control
 from control import ControlMode
-from controller.angle_controller import AngleController
+# from controller.angle_controller import AngleController
 
 ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
@@ -37,7 +37,7 @@ class Stanley(magicbot.MagicRobot):
     zach_control: control.Zach
     lift_override_control: control.LiftOverride
 
-    angle_ctrl: AngleController
+    # angle_ctrl: AngleController
 
     def createObjects(self):
         # Inputs

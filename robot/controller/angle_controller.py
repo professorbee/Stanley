@@ -2,7 +2,6 @@ from magicbot import tunable
 import wpilib
 import navx
 from wpilib.interfaces import PIDOutput
-import navx
 
 from components.drive import Drive
 

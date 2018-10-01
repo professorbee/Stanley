@@ -32,6 +32,8 @@ class Zach:
         self.drive.drive(total_speed, -self.gamepad.getX(GenericHID.Hand.kLeft) * .75)
 
         self.intake.set_speed(-self.gamepad_alt.getY(GenericHID.Hand.kRight))
+        # self.intake.left_intake_motor.set(self.gamepad_alt.getRawAxis(0))
+        # self.intake.right_intake_motor.set(-xself.gamepad_alt.getRawAxis(0))
 
         if self.gamepad_alt.getRawButton(6):
             self.grabber.grab()
@@ -52,15 +54,15 @@ class Zach:
         elif self.gamepad_alt.getXButton():
             self.lift.set_setpoint(600)
         elif self.gamepad_alt.getYButton():
-            self.lift.set_setpoint(1700)
+            self.lift.set_setpoint(1600)
         elif self.gamepad_alt.getBButton():
             self.lift.set_setpoint(1800)
 
         setpoint = self.lift.get_setpoint()
         if self.gamepad_alt.getRawAxis(3) > 0.02:
-            self.lift.set_setpoint(setpoint + (self.gamepad_alt.getRawAxis(3) * 50))
+            self.lift.set_setpoint(setpoint + (self.gamepad_alt.getRawAxis(3) * 60))
         if self.gamepad_alt.getRawAxis(2) > 0.02:
-            self.lift.set_setpoint(setpoint - (self.gamepad_alt.getRawAxis(2) * 50))
+            self.lift.set_setpoint(setpoint - (self.gamepad_alt.getRawAxis(2) * 60))
 
     def execute(self):
         pass
