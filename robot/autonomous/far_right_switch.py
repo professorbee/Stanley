@@ -10,7 +10,7 @@ class FarRightSwitch(StatefulAutonomous):
 
     drive: drive.Drive
     intake: intake.Intake
-    angle_ctrl: AngleController
+    # angle_ctrl: AngleController
 
     def on_enable(self):
         self.drive.reset_encoders()
