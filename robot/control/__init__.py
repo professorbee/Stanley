@@ -10,6 +10,7 @@ class ControlMode(Enum):
     JOYSTICK = auto()
     GAMEPAD = auto()
     ZACH = auto()
+    TREVOR = auto()
     MANUAL_LIFT = auto()
     REMOTE_CONTROL = auto()
 
@@ -19,3 +20,4 @@ from .joystick import Joystick
 from .gamepad import Gamepad
 from .lift_override import LiftOverride
 from .zach import Zach
+from .trevor import Trevor

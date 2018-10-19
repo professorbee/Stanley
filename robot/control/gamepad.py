@@ -9,7 +9,7 @@ class Gamepad:
     """
         Implements gamepad control via a xbox style gamepad
         
-        Currently Gamepad and Zach control modes are the same
+        Currently Gamepad and Trevor control modes are the same
     """
 
     gamepad: wpilib.XboxController

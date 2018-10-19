@@ -35,6 +35,7 @@ class Stanley(magicbot.MagicRobot):
     # Gamepad or "Zach" controls
     gamepad_control: control.Gamepad
     zach_control: control.Zach
+    trevor_control: control.Trevor
     lift_override_control: control.LiftOverride
 
     angle_ctrl: AngleController
@@ -94,9 +95,10 @@ class Stanley(magicbot.MagicRobot):
         self.control_chooser = wpilib.SendableChooser()
         self.control_chooser.addObject("Joystick", 1)
         self.control_chooser.addObject("Gamepad", 2)
-        self.control_chooser.addDefault("Zach", 3)
-        self.control_chooser.addObject("Lift Override", 4)
-        self.control_chooser.addObject("Remote Control", 5)
+        self.control_chooser.addObject("Zach", 3)
+        self.control_chooser.addDefault("Trevor", 4)
+        self.control_chooser.addObject("Lift Override", 5)
+        self.control_chooser.addObject("Remote Control", 6)
 
         wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
 
@@ -122,6 +124,8 @@ class Stanley(magicbot.MagicRobot):
                 self.gamepad_control.process()
             elif self.control_mode == ControlMode.ZACH:
                 self.zach_control.process()
+            elif self.control_mode == ControlMode.TREVOR:
+                self.trevor_control.process()
             elif self.control_mode == ControlMode.JOYSTICK:
                 self.joystick_control.process()
             elif self.control_mode == ControlMode.MANUAL_LIFT:
