@@ -3,7 +3,7 @@ import wpilib
 
 from components import drive, intake, grabber
 
-# from controller.angle_controller import AngleController
+from controller.angle_controller import AngleController
 
 
 class ApproachSwitch(StatefulAutonomous):
@@ -13,7 +13,7 @@ class ApproachSwitch(StatefulAutonomous):
     drive: drive.Drive
     intake: intake.Intake
     grabber: grabber.Grabber
-    # angle_ctrl: AngleController
+    angle_ctrl: AngleController
 
     def on_enable(self):
         self.drive.reset_encoders()
@@ -55,46 +55,47 @@ class ApproachSwitch(StatefulAutonomous):
     @state()
     def reverse2(self):
         if self.drive.right_encoder.get() < -20:
-            self.next_state("finish2")
+            self.next_state("prep_turn")
         self.drive.drive(-.6, 0)
 
     @state()
     def reverse(self):
         if self.drive.right_encoder.get() < 40:
-            self.next_state("finish2")
+            self.next_state("prep_turn")
         self.drive.drive(-.6, 0)
 
-    # @state()
-    # def prep_turn(self):
-    #     self.angle_ctrl.set_target(45)
-    #     self.angle_ctrl.finished = False
-    #     self.next_state("turn")
+    @state()
+    def prep_turn(self):
+        self.angle_ctrl.set_target(45)
+        self.angle_ctrl.finished = False
+        self.next_state("turn")
 
-    # @timed_state(duration=2, next_state="activate_intake")
+    @timed_state(duration=2, next_state="activate_intake")
     # @timed_state(duration=2, next_state="finish2")
-    # def turn(self):
-    #     self.drive.right_encoder.zero()
-    #     self.drive.left_encoder.zero()
-    #     self.drive.reset_encoders()
-    # self.angle_ctrl.enable()
+    def turn(self):
+        self.drive.right_encoder.zero()
+        self.drive.left_encoder.zero()
+        self.drive.reset_encoders()
 
-    # @state()
-    # def activate_intake(self):
-    #     self.intake.set_speed(-0.8)
-    #     self.next_state("approach_stack")
+        self.angle_ctrl.enable()
 
-    # @timed_state(duration=3, next_state="reverse_from_cubes")
-    # def approach_stack(self):
-    #     if self.drive.right_encoder.get() > 30:
-    #         self.next_state("reverse_from_cubes")
-    #     self.drive.drive(0.55, 0)
+    @state()
+    def activate_intake(self):
+        self.intake.set_speed(-0.8)
+        self.next_state("approach_stack")
 
-    # @timed_state(duration=3, next_state="finish2")
-    # def reverse_from_cubes(self):
-    #     self.intake.set_speed(0)
-    #     if self.drive.right_encoder.get() < 0:
-    #         self.next_state("finish")
-    #     self.drive.drive(-.55, 0)
+    @timed_state(duration=3, next_state="reverse_from_cubes")
+    def approach_stack(self):
+        if self.drive.right_encoder.get() > 30:
+            self.next_state("reverse_from_cubes")
+        self.drive.drive(0.55, 0)
+
+    @timed_state(duration=3, next_state="finish2")
+    def reverse_from_cubes(self):
+        self.intake.set_speed(0)
+        if self.drive.right_encoder.get() < 0:
+            self.next_state("finish2")
+        self.drive.drive(-.55, 0)
 
     @state()
     def finish2(self):
