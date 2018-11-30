@@ -95,7 +95,7 @@ class Stanley(magicbot.MagicRobot):
         self.control_chooser = wpilib.SendableChooser()
         self.control_chooser.addObject("Joystick", 1)
         self.control_chooser.addObject("Gamepad", 2)
-        self.control_chooser.addObject("Zach", 3)
+        self.control_chooser.addObject("Mateo", 3)
         self.control_chooser.addDefault("Trevor", 4)
         self.control_chooser.addObject("Lift Override", 5)
         self.control_chooser.addObject("Remote Control", 6)
