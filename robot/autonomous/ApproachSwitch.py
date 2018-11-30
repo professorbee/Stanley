@@ -21,10 +21,15 @@ class ApproachSwitch(StatefulAutonomous):
         self.drive.right_encoder.zero()
         super().on_enable()
 
-    @timed_state(first=True, duration=5, next_state="prep_reverse")
+    @timed_state(first=True, duration=5, next_state="leave_wall")
+    def wait1(self):
+        pass
+
+
+    @timed_state(duration=5, next_state="prep_reverse")
     def leave_wall(self):
         if self.drive.right_encoder.get() > 110.5:
-            if wpilib.DriverStation.getInstance().getGameSpecificMessage()[0] == "R":
+            if wpilib.DriverStation.getInstance().getGameSpecificMessage()[0] == "L":
                 self.grabber.release()
                 self.intake.set_speed(0.5)
                 self.next_state("launch")
@@ -39,6 +44,7 @@ class ApproachSwitch(StatefulAutonomous):
     @state()
     def launch_stop(self):
         self.intake.set_speed(0)
+        self.grabber.grab()
         self.next_state("prep_reverse")
 
     @state()

@@ -20,7 +20,14 @@ class AngleTest(StatefulAutonomous):
         super().on_enable()
         self.navx.reset()
 
-    @timed_state(duration=10.0, first=True, next_state="finish")
+    @timed_state(duration=5.0, first=True, next_state="finish")
+    def leave_wall(self):
+        if self.drive.right_encoder.get() > 110.5:
+            self.next_state("align")
+        self.drive.drive(.6, 0)
+
+
+    @timed_state(duration=5.0, next_state="finish")
     def align(self, initial_call):
         self.angle_ctrl.set_target(self.align_to)
         self.angle_ctrl.enable()
@@ -34,4 +41,6 @@ class AngleTest(StatefulAutonomous):
         # self.drive.wait_for_align = False
         # self.drive.threshold_input_vectors = True
         # self.drive.disable_position_prediction()
+        self.angle_ctrl.enable()
+
         self.done()
