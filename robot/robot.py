@@ -15,6 +15,8 @@ import control
 from control import ControlMode
 from controller.angle_controller import AngleController
 
+import marsutils
+
 ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
 WHEEL_REVOLUTION = (math.pi * WHEEL_DIAMETER) / ENCODER_REVOLUTION
