@@ -12,7 +12,6 @@ from ctre import WPI_TalonSRX as CANTalon
 from components import drive, lift, grabber, intake
 from common.encoder import ExternalEncoder
 import control
-from control import ControlMode
 from controller.angle_controller import AngleController
 
 import marsutils
@@ -25,6 +24,7 @@ LIFT_HUB_DIAMETER = 3 + (7 / 8)
 LIFT_HUB_REVOLUTION = (math.pi * LIFT_HUB_DIAMETER) / ENCODER_REVOLUTION
 
 
+@marsutils.with_ctrl_manager
 class Stanley(magicbot.MagicRobot):
     ## Magic components
     drive: drive.Drive
@@ -36,7 +36,7 @@ class Stanley(magicbot.MagicRobot):
     joystick_control: control.Joystick
     # Gamepad or "Zach" controls
     gamepad_control: control.Gamepad
-    zach_control: control.Zach
+    mateo_control: control.Mateo
     trevor_control: control.Trevor
     lift_override_control: control.LiftOverride
 
@@ -93,23 +93,6 @@ class Stanley(magicbot.MagicRobot):
 
         self.net_table = NetworkTables.getTable("SmartDashboard")
 
-        # Setup control chooser
-        self.control_chooser = wpilib.SendableChooser()
-        self.control_chooser.addObject("Joystick", 1)
-        self.control_chooser.addObject("Gamepad", 2)
-        self.control_chooser.addObject("Mateo", 3)
-        self.control_chooser.addDefault("Trevor", 4)
-        self.control_chooser.addObject("Lift Override", 5)
-        self.control_chooser.addObject("Remote Control", 6)
-
-        wpilib.SmartDashboard.putData("Control Mode", self.control_chooser)
-
-        self.control_chooser_control = ChooserControl(
-            "Control Mode", on_selected=self.control_mode_changed
-        )
-
-        self.control_mode = ControlMode.GAMEPAD
-
         # Launch camera server
         wpilib.CameraServer.launch()
 
@@ -117,38 +100,6 @@ class Stanley(magicbot.MagicRobot):
         """Prepare for autonomous mode"""
 
         magicbot.MagicRobot.autonomous(self)
-
-    def teleopPeriodic(self):
-        # Dont let an error take down robot
-        with self.consumeExceptions():
-            ## Drive code is in the ".control" module
-            if self.control_mode == ControlMode.GAMEPAD:
-                self.gamepad_control.process()
-            elif self.control_mode == ControlMode.ZACH:
-                self.zach_control.process()
-            elif self.control_mode == ControlMode.TREVOR:
-                self.trevor_control.process()
-            elif self.control_mode == ControlMode.JOYSTICK:
-                self.joystick_control.process()
-            elif self.control_mode == ControlMode.MANUAL_LIFT:
-                self.lift_override_control.process()
-
-            # Set the override state
-            # This is outside the if block so that it will be disabled properly
-            self.lift.set_manual_override(self.control_mode == ControlMode.MANUAL_LIFT)
-
-    def control_mode_changed(self, new_value):
-        """
-            Network tables callback to update control mode
-        """
-        try:
-            self.control_mode = ControlMode(self.control_chooser.getSelected())
-        except ValueError:
-            print(
-                "Unable to set control mode, `{}:{}` is not valid".format(
-                    new_value, self.control_chooser.getSelected()
-                )
-            )
 
 
 if __name__ == "__main__":

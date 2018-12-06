@@ -1,14 +1,18 @@
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
+import marsutils
 
 
 import components
 
 
-class Trevor:
+class Trevor(marsutils.ControlInterface):
     """
         Implements gamepad control via a xbox style gamepad
     """
+
+    _DISPLAY_NAME = "Trevor"
+    _SORT = 8
 
     gamepad: wpilib.XboxController
     gamepad_alt: wpilib.XboxController

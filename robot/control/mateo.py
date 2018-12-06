@@ -1,16 +1,19 @@
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
-
+import marsutils
 
 import components
 
 
-class Zach:
+class Mateo(marsutils.ControlInterface):
     """
         Implements gamepad control via a xbox style gamepad
         
-        Currently Gamepad and Zach control modes are the same
+        Currently Gamepad and Mateo control modes are the same
     """
+
+    _DISPLAY_NAME = "Mateo"
+    _SORT = 9
 
     gamepad: wpilib.XboxController
     gamepad_alt: wpilib.XboxController
@@ -20,7 +23,7 @@ class Zach:
     intake: components.intake.Intake
     grabber: components.grabber.Grabber
 
-    def process(self):
+    def teleopPeriodic(self):
         forward_speed = self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
         reverse_speed = -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft)
         total_speed = forward_speed + reverse_speed
@@ -63,7 +66,4 @@ class Zach:
             self.lift.set_setpoint(setpoint + (self.gamepad_alt.getRawAxis(3) * 60))
         if self.gamepad_alt.getRawAxis(2) > 0.02:
             self.lift.set_setpoint(setpoint - (self.gamepad_alt.getRawAxis(2) * 60))
-
-    def execute(self):
-        pass
 

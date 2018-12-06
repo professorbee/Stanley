@@ -1,14 +1,17 @@
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
-from common import misc
+import marsutils
 
+from common import misc
 import components
 
 
-class Joystick:
+class Joystick(marsutils.ControlInterface):
     """
         Implements joystick control via a flight stick
     """
+
+    _DISPLAY_NAME = "Joystick"
 
     stick: wpilib.Joystick
     gamepad: wpilib.XboxController
@@ -18,7 +21,7 @@ class Joystick:
     intake: components.intake.Intake
     grabber: components.grabber.Grabber
 
-    def process(self):
+    def teleopPeriodic(self):
         self.drive.drive(-self.stick.getY(), -self.stick.getZ())
 
         intake_speed = self.gamepad.getY(GenericHID.Hand.kLeft)
@@ -44,6 +47,3 @@ class Joystick:
         elif self.stick.getRawButton(10):
             self.lift.set_setpoint(2565)
             # self.lift.set_setpoint(1620)
-
-    def execute(self):
-        pass

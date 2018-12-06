@@ -1,16 +1,18 @@
 import wpilib
 from wpilib.interfaces.generichid import GenericHID
-
+import marsutils
 
 import components
 
 
-class Gamepad:
+class Gamepad(marsutils.ControlInterface):
     """
         Implements gamepad control via a xbox style gamepad
         
         Currently Gamepad and Trevor control modes are the same
     """
+
+    _DISPLAY_NAME = "Gamepad"
 
     gamepad: wpilib.XboxController
 
@@ -19,7 +21,7 @@ class Gamepad:
     intake: components.intake.Intake
     grabber: components.grabber.Grabber
 
-    def process(self):
+    def teleopPeriodic(self):
         self.drive.drive(
             self.gamepad.getTriggerAxis(GenericHID.Hand.kRight)
             + -self.gamepad.getTriggerAxis(GenericHID.Hand.kLeft),
@@ -42,6 +44,3 @@ class Gamepad:
         elif pov == 0:
             # self.lift.set_setpoint(179)
             self.lift.set_setpoint(2367)
-
-    def execute(self):
-        pass
