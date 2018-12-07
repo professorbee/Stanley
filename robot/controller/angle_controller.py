@@ -39,18 +39,18 @@ class AngleController:
         if self.enabled:
             # print((self.target - self.start) > 0)
             # print(self.target, self.start, self.navx.getAngle())
-            angle= self.navx.getAngle()+45
+            angle = self.navx.getAngle() + 45
             if (self.target - self.start) > 0:
                 # if (self.navx.getAngle() - self.start) < self.target+self.start:
-                if (angle - self.start) < self.target-self.start:
-                # if (self.navx.getAngle() < self.target):
+                if (angle - self.start) < self.target - self.start:
+                    # if (self.navx.getAngle() < self.target):
                     self.drive.drive(0, self.speed)
                 else:
                     self.finished = True
             else:
                 # if (self.navx.getAngle() - self.start) > (self.target + self.start):
                 if (angle - self.start) > (self.target - self.start):
-                # if (self.navx.getAngle() > (self.target -self.start)):
+                    # if (self.navx.getAngle() > (self.target -self.start)):
                     self.drive.drive(0, -self.speed)
                 else:
                     self.finished = True

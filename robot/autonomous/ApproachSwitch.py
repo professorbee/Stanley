@@ -25,7 +25,6 @@ class ApproachSwitch(StatefulAutonomous):
     def wait1(self):
         pass
 
-
     @timed_state(duration=5, next_state="prep_reverse")
     def leave_wall(self):
         if self.drive.right_encoder.get() > 110.5:

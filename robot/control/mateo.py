@@ -66,4 +66,3 @@ class Mateo(marsutils.ControlInterface):
             self.lift.set_setpoint(setpoint + (self.gamepad_alt.getRawAxis(3) * 60))
         if self.gamepad_alt.getRawAxis(2) > 0.02:
             self.lift.set_setpoint(setpoint - (self.gamepad_alt.getRawAxis(2) * 60))
-

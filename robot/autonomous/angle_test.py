@@ -26,7 +26,6 @@ class AngleTest(StatefulAutonomous):
             self.next_state("align")
         self.drive.drive(.6, 0)
 
-
     @timed_state(duration=5.0, next_state="finish")
     def align(self, initial_call):
         self.angle_ctrl.set_target(self.align_to)
