@@ -3,4 +3,4 @@ wpilib
 robotpy-ctre
 robotpy-navx
 
-git+https://github.com/Mars1523/Mars-Utils
+marsutils ~= 0.2

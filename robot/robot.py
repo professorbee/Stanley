@@ -14,7 +14,7 @@ from common.encoder import ExternalEncoder
 import control
 from controller.angle_controller import AngleController
 
-import marsutils
+from marsutils.decorator import with_ctrl_manager
 
 ENCODER_REVOLUTION = 360
 WHEEL_DIAMETER = 4
@@ -24,7 +24,7 @@ LIFT_HUB_DIAMETER = 3 + (7 / 8)
 LIFT_HUB_REVOLUTION = (math.pi * LIFT_HUB_DIAMETER) / ENCODER_REVOLUTION
 
 
-@marsutils.with_ctrl_manager
+@with_ctrl_manager
 class Stanley(magicbot.MagicRobot):
     ## Magic components
     drive: drive.Drive
