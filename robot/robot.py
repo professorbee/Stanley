@@ -5,7 +5,6 @@ import wpilib.drive
 
 import navx
 from networktables import NetworkTables
-from networktables.util import ChooserControl
 
 from ctre import WPI_TalonSRX as CANTalon
 
@@ -26,13 +25,13 @@ LIFT_HUB_REVOLUTION = (math.pi * LIFT_HUB_DIAMETER) / ENCODER_REVOLUTION
 
 @with_ctrl_manager
 class Stanley(magicbot.MagicRobot):
-    ## Magic components
+    # Magic components
     drive: drive.Drive
     lift: lift.Lift
     intake: intake.Intake
     grabber: grabber.Grabber
 
-    ## Control modes
+    # Control modes
     joystick_control: control.Joystick
     # Gamepad or "Zach" controls
     gamepad_control: control.Gamepad
