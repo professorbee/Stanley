@@ -1,14 +1,12 @@
 import wpilib
+from magicbot import will_reset_to
 
 
-class Intake(object):
+class Intake:
     left_intake_motor: wpilib.Spark
     right_intake_motor: wpilib.Spark
 
-    def setup(self):
-        self.right_intake_motor.setInverted(True)
-
-        self.speed = 0.0
+    speed = will_reset_to(0)
 
     def set_speed(self, new_speed: float):
         self.speed = new_speed

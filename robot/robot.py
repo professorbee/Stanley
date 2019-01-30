@@ -79,6 +79,7 @@ class Stanley(magicbot.MagicRobot):
         # Intake motors
         self.left_intake_motor = wpilib.Spark(2)
         self.right_intake_motor = wpilib.Spark(3)
+        self.right_intake_motor.setInverted(True)
 
         # Intake grabbers
         self.grabber_solenoid = wpilib.DoubleSolenoid(1, 0, 1)
