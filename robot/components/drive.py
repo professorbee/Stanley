@@ -2,17 +2,18 @@ import wpilib
 
 import navx
 from common.encoder import ExternalEncoder
+from magicbot import will_reset_to
 
 
-class Drive(object):
+class Drive:
     drive_train: wpilib.drive.DifferentialDrive
     navx: navx.AHRS
     right_encoder: ExternalEncoder
     left_encoder: ExternalEncoder
 
-    def __init__(self):
-        self.y = self.rotation = 0
-        self.squared = True
+    y = will_reset_to(0)
+    rotation = will_reset_to(0)
+    squared = True
 
     def drive(self, y, rot, squared=True):
         self.y = y
@@ -21,9 +22,6 @@ class Drive(object):
 
     def execute(self):
         self.drive_train.arcadeDrive(-self.y, -self.rotation, self.squared)
-
-        self.y = 0
-        self.rotation = 0
         self.update_sd()
 
     def reset_encoders(self):

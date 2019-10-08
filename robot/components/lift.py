@@ -1,6 +1,7 @@
 import wpilib
 from enum import Enum
 from ctre import WPI_TalonSRX as CANTalon
+from magicbot import will_reset_to, tunable
 
 import common.encoder
 
@@ -10,12 +11,15 @@ class LiftMode(Enum):
     AUTO = 1
 
 
-class Lift(object):
+class Lift:
     lift_master: CANTalon
     lift_encoder: common.encoder.BaseEncoder
 
+    setpoint = tunable(0)
+
     def setup(self):
         self.manual_override = False
+        self.manual_override_value = 0
 
         self.pid_controller = wpilib.PIDController(
             0.022, 0.0, 0.0, self.lift_encoder, self.lift_master
@@ -25,8 +29,6 @@ class Lift(object):
         self.pid_controller.setOutputRange(-.165, .6)
         self.pid_controller.enable()
 
-        self.setpoint = 0
-        self.manual_override_value = 0
 
     def set_setpoint(self, new_pos):
         self.setpoint = new_pos
